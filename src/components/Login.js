@@ -9,13 +9,11 @@ const Login = () => {
     const [ loginEmail, setLoginEmail ] = useState("");
     const [ loginPassword, setLoginPassword ] = useState("");
 
-     const [ user, setUser] = useState({});
+    const [ user, setUser] = useState(false);
 
-    // onAuthStateChanged(auth,(currentUser)=>{
-    //     setUser(currentUser);
-    // })
 
-    const login = async () =>{
+    const login = async (e) =>{
+        e.preventDefault();
         try{
             const user = await signInWithEmailAndPassword(
                 auth,
@@ -23,12 +21,12 @@ const Login = () => {
                 loginPassword
             );
             alert("logged in!");
-            console.log(user);
+            setUser(true);
+            window.location = '/';
         }catch(error){
-            alert("Cant log in!!");
+            alert("Can't log in!!");
             console.log(error.message);
         }
-        console.log("Logged in!");
     };
 
   return (
@@ -40,11 +38,17 @@ const Login = () => {
                 <Form>
                     <Form.Group id="email">
                         <Form.Label>Email :</Form.Label>
-                        <Form.Control type="email" required/>
+                        <Form.Control type="email" onChange={
+                            (event)=>{
+                                setLoginEmail(event.target.value);
+                            }} value={loginEmail} required/>
                     </Form.Group>
                     <Form.Group id="password">
                         <Form.Label>Password :</Form.Label>
-                        <Form.Control type="password" required/>
+                        <Form.Control type="password" onChange={
+                            (event)=>{
+                                setLoginPassword(event.target.value);
+                            }} value={loginPassword} required/>
                     </Form.Group>
                     <Button className="w-100 mt-3" type="submit" onClick={login}>
                      Login
@@ -52,7 +56,7 @@ const Login = () => {
                 </Form>
             </Card.Body>
             <div className="w-100 text-center mt-2">
-            Don't have an Account? <a href='Signup' style={{ textDecoration:"none"}}> SignUp </a>
+            Don't have an Account? <a href='Register' style={{ textDecoration:"none"}}> SignUp </a>
             {/* <br/><h3>{auth.currentUser.email}</h3> */}
         </div>
         </Card>
